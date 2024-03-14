@@ -1,4 +1,7 @@
 ---
+import Sidebar from '../components/Sidebar.astro';
+import NavLink from '../components/NavLink.astro';
+
 interface Props {
   title: string;
 }
@@ -6,7 +9,6 @@ interface Props {
 const { title } = Astro.props;
 ---
 
-<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -16,40 +18,66 @@ const { title } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <slot />
+    <div class="-translate-x-full transform-none overflow-hidden"></div>
+    <button
+      id="sidebar-button"
+      type="button"
+      class="ms-3 mt-2 inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 sm:hidden dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+      <span class="sr-only">Open sidebar</span>
+      <svg
+        class="h-6 w-6"
+        aria-hidden="true"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          clip-rule="evenodd"
+          fill-rule="evenodd"
+          d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+        ></path>
+      </svg>
+    </button>
+
+    <Sidebar>
+      <NavLink to="#" icon="mdi:chart-pie">Dashboard</NavLink>
+      <NavLink to="#" icon="mdi:users">Users</NavLink>
+      <NavLink to="#" icon="mdi:games">Arcade machines</NavLink>
+      <NavLink to="#" icon="mdi:login">Sign in</NavLink>
+    </Sidebar>
+
+    <div id="container" class="h-full p-4 sm:ml-64">
+      <slot />
+    </div>
   </body>
 </html>
+
+<script>
+  let bodyhandler: (this: HTMLBodyElement) => void;
+  const container = document.querySelector('#container')!;
+  const button = document.querySelector('#sidebar-button')!;
+  const sidebar = document.querySelector('#sidebar')!;
+
+  button.addEventListener('click', function (this: HTMLButtonElement) {
+    document.body.classList.add('overflow-hidden');
+    sidebar.classList.remove('-translate-x-full');
+    sidebar.classList.add('transform-none');
+
+    bodyhandler = function (this: HTMLBodyElement) {
+      document.body.classList.remove('overflow-hidden');
+      sidebar.classList.remove('transform-none');
+      sidebar.classList.add('-translate-x-full');
+      container.removeEventListener('click', bodyhandler);
+    };
+    container.addEventListener('click', bodyhandler);
+  });
+</script>
+
 <style lang="scss" is:global>
-  :root {
-    --accent: 136, 58, 234;
-    --accent-light: 224, 204, 250;
-    --accent-dark: 49, 10, 101;
-    --accent-gradient: linear-gradient(
-      45deg,
-      rgb(var(--accent)),
-      rgb(var(--accent-light)) 30%,
-      white 60%
-    );
-  }
   html {
     font-family: system-ui, sans-serif;
-    // background: #13151a;
-    background-size: 224px;
   }
-  code {
-    font-family:
-      Menlo,
-      Monaco,
-      Lucida Console,
-      Liberation Mono,
-      DejaVu Sans Mono,
-      Bitstream Vera Sans Mono,
-      Courier New,
-      monospace;
-  }
-
-  input {
-    border: 1px solid black;
-    @apply px-1;
+  html,
+  body {
+    height: 100%;
   }
 </style>
