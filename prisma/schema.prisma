@@ -6,3 +6,12 @@ datasource db {
   provider = "mysql"
   url      = env("DB_URL")
 }
+
+model ArcadeMachine {
+  id Int @id @default(autoincrement())
+  name String
+  modelNumber Int
+  price Int
+
+  @@map("arcadeMachines")
+}
