@@ -9,6 +9,7 @@ export default defineConfig({
   integrations: [
     icon({
       include: {
+        local: ['*'],
         mdi: ['*'],
       },
     }),
