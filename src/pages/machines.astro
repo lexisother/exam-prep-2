@@ -1,0 +1,67 @@
+---
+import Card from '../components/Card.astro';
+import Instructions from '../components/Instructions.astro';
+import Layout from '../layouts/Layout.astro';
+import { db } from '../lib/db';
+
+const machines = await db.arcadeMachine.findMany();
+console.log(machines);
+---
+
+<Layout title="Arcade Machines">
+  <main>
+    <h1 class="text-gradient my-5 text-4xl md:my-8 md:text-6xl">Arcade Machines</h1>
+    <Instructions>Manage arcade machines</Instructions>
+    <ul role="list" class="card-grid">
+      {
+        machines.map((m) => (
+          <Card
+            href={`/machines/${m.id}`}
+            title={m.name}
+            body={`Model ID: ${m.modelNumber} | Price: €${m.price}`}
+          />
+        ))
+      }
+    </ul>
+  </main>
+</Layout>
+
+<style lang="scss">
+  @mixin desktop {
+    @media (min-width: 768px) {
+      @content;
+    }
+  }
+
+  body {
+    background: #13151a;
+  }
+  main {
+    margin: auto;
+    color: white;
+    font-size: 20px;
+    line-height: 1.6;
+  }
+  h1 {
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+  }
+  .text-gradient {
+    background-image: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 400%;
+    background-position: 0%;
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 2rem;
+    padding: 0;
+
+    @include desktop {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
