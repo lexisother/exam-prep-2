@@ -1,0 +1,26 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Button from '../../components/Button.astro';
+---
+
+<Layout title="Create Machine">
+  <main>
+    <div class="mx-20 flex flex-col items-center gap-2">
+      <Header>Create Machine</Header>
+      <form
+        action="/api/machines/create"
+        method="post"
+        class="flex flex-col items-center gap-2 text-black">
+        <input name="name" type="text" placeholder="Name" />
+        <div class="grid grid-cols-2 gap-2">
+          <input name="price" type="number" placeholder="Price" />
+          <input name="modelNumber" type="number" placeholder="Model Number" />
+        </div>
+        <Button>
+          <input type="submit" />
+        </Button>
+      </form>
+    </div>
+  </main>
+</Layout>

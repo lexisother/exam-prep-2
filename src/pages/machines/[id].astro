@@ -1,0 +1,57 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Button from '../../components/Button.astro';
+import type { ArcadeMachine } from '@prisma/client';
+import { db } from '../../lib/db';
+
+const id = Astro.params.id;
+let item: ArcadeMachine | null = null,
+  err = false;
+
+if (!id) err = true;
+else {
+  item = await db.arcadeMachine.findFirst({
+    where: {
+      id: Number(id),
+    },
+  });
+}
+
+if (!item) err = true;
+
+let title = `Edit "${item?.name}"`;
+---
+
+{
+  !err ? (
+    <Layout title={title}>
+      <main>
+        <Header>{title}</Header>
+        <form
+          action="/api/machines/edit"
+          method="post"
+          class="flex flex-col items-center gap-2 text-black">
+          <input name="id" type="number" value={item?.id} hidden />
+          <input name="name" type="text" placeholder="Name" value={item?.name} />
+          <div class="grid grid-cols-2 gap-2">
+            <input name="price" type="number" placeholder="Price" value={item?.price} />
+            <input
+              name="modelNumber"
+              type="number"
+              placeholder="Model Number"
+              value={item?.modelNumber}
+            />
+          </div>
+          <Button>
+            <input type="submit" />
+          </Button>
+        </form>
+      </main>
+    </Layout>
+  ) : (
+    <Layout title="No machine found">
+      <div class="text-white">No machine found with this ID.</div>
+    </Layout>
+  )
+}
