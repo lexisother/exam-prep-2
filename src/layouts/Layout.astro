@@ -2,6 +2,7 @@
 import { Icon } from 'astro-icon/components';
 import Sidebar from '../components/Sidebar.astro';
 import NavLink from '../components/NavLink.astro';
+import logoUrl from '../images/logo.jpeg';
 
 interface Props {
   title: string;
@@ -29,10 +30,12 @@ const { title } = Astro.props;
     </button>
 
     <Sidebar>
-      <NavLink to="/" icon="mdi:chart-pie">Dashboard</NavLink>
+      <img src={logoUrl.src} alt="" width="150" style="margin: auto;" />
+      <hr class="border-t-gray-500" />
+      <NavLink to="#" icon="mdi:ticket-outline">Tickets</NavLink>
+      <NavLink to="#" icon="mdi:cart">Orders</NavLink>
+      <NavLink to="/machines" icon="mdi:games">Machines</NavLink>
       <NavLink to="#" icon="mdi:users">Users</NavLink>
-      <NavLink to="/machines" icon="mdi:games">Arcade machines</NavLink>
-      <NavLink to="#" icon="mdi:login">Sign in</NavLink>
     </Sidebar>
 
     <div id="container" class="h-full p-4 sm:ml-64">
@@ -82,7 +85,7 @@ const { title } = Astro.props;
     height: 100%;
   }
   body {
-    background: #13151a;
+    background: #111827;
   }
   main {
     margin: auto;
